@@ -21,6 +21,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
+
+
+    private $nom;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $prenom;
+
+    /**
+     * @ORM\Column(type="string", length=15)
+     */
+    private $numtelephone;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $adresse;
+
+
+
+
+
+
     /**
      * @var list<string> The user roles
      */
@@ -147,4 +171,53 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getNom(): ?string
+    {
+        return $this->nom;
+    }
+
+    public function setNom(string $nom): self
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    public function getPrenom(): ?string
+    {
+        return $this->prenom;
+    }
+
+    public function setPrenom(string $prenom): self
+    {
+        $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    public function getNumtelephone(): ?string
+    {
+        return $this->numtelephone;
+    }
+
+    public function setNumtelephone(string $numtelephone): self
+    {
+        $this->numtelephone = $numtelephone;
+
+        return $this;
+    }
+
+    public function getAdresse(): ?string
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(string $adresse): self
+    {
+        $this->adresse = $adresse;
+
+        return $this;
+    }
+
 }

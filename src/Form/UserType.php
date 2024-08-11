@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User;
+use Doctrine\DBAL\Types\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -19,8 +20,13 @@ class UserType extends AbstractType
                 'first_options' => ['label' => 'Mot de passe'],
                 'second_options' => ['label' => 'Confirmez le mot de passe'],
                 'invalid_message' => 'Les champs de mot de passe doivent correspondre.',
-                'mapped' => false, // Indique à Symfony de ne pas mapper ce champ directement à l'entité User
-            ])
+                'mapped' => false, // Indique à Symfony de ne pas mapper ce champ directement à l'entité User  
+                ])
+
+            ->add('nom'  )
+             ->add('prenom')
+                ->add('numtelephone')
+                ->add('adresse')
         ;
     }
 
