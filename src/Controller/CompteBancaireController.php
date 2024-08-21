@@ -23,25 +23,37 @@ class CompteBancaireController extends AbstractController
     }
 
     #[Route('/new', name: 'app_compte_bancaire_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'app_compte_bancaire_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $compteBancaire = new CompteBancaire();
         $form = $this->createForm(CompteBancaireType::class, $compteBancaire);
+    
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+            // Récupérez le dernier numéro de compte
+            $lastAccount = $entityManager->getRepository(CompteBancaire::class)
+                ->findOneBy([], ['numero_compte' => 'DESC']);
+            
+            $newAccountNumber = $lastAccount ? $lastAccount->getNumeroCompte() + 1 : 1000000;
+    
+            // Définissez le nouveau numéro de compte
+            $compteBancaire->setNumeroCompte($newAccountNumber);
+    
+            // Persist et flush
             $entityManager->persist($compteBancaire);
             $entityManager->flush();
-
+    
+            // Redirection après succès
             return $this->redirectToRoute('app_compte_bancaire_index', [], Response::HTTP_SEE_OTHER);
         }
-
+    
         return $this->render('compte_bancaire/new.html.twig', [
             'compte_bancaire' => $compteBancaire,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
-
+    
     #[Route('/{id}', name: 'app_compte_bancaire_show', methods: ['GET'])]
     public function show(CompteBancaire $compteBancaire): Response
     {

@@ -85,6 +85,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
+/**
+     * @ORM\Column(type="date", nullable=true)
+     * @Assert\NotNull(message="La date de naissance est requise.")
+     * @Assert\Date(message="Veuillez entrer une date valide.")
+     * @Assert\LessThan("today", message="La date de naissance doit être dans le passé.")
+     */
+    private $dateDeNaissance;
+
+    // Getters and Setters for dateDeNaissance
+    public function getDateDeNaissance(): ?\DateTimeInterface
+    {
+        return $this->dateDeNaissance;
+    }
+
+    public function setDateDeNaissance(\DateTimeInterface $dateDeNaissance): self
+    {
+        $this->dateDeNaissance = $dateDeNaissance;
+
+        return $this;
+    }
+
+
+
     /**
      * A visual identifier that represents this user.
      *
