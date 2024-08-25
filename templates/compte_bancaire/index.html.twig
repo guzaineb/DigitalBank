@@ -28,8 +28,9 @@
                 <td>{{ compte_bancaire.crattedAt ? compte_bancaire.crattedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ compte_bancaire.updatedAt ? compte_bancaire.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ compte_bancaire.userId }}</td>
-                <td>{{ compte_bancaire.User.nom }}</td>
-                <td>{{ compte_bancaire.User.prenom }}</td>
+<td>{{ compte_bancaire.user ? compte_bancaire.user.nom : 'N/A' }}</td>
+<td>{{ compte_bancaire.user ? compte_bancaire.user.prenom : 'N/A' }}</td>
+
                 <td>
                     <a href="{{ path('app_compte_bancaire_show', {'id': compte_bancaire.id}) }}">show</a>
                     <a href="{{ path('app_compte_bancaire_edit', {'id': compte_bancaire.id}) }}">edit</a>

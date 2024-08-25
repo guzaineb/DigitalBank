@@ -1,4 +1,32 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+{% extends 'back/index.html.twig' %}
+
+{% block body %}
+<div class="container">
+    <div class="authentication-wrapper authentication-basic container-p-y">
+        <div class="authentication-inner">
+            <!-- Register Form -->
+            <div class="card" style="max-width: 600px; margin: auto;">
+                <div class="card-body p-4">
+                    {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+                    
+                    {{ form_errors(form) }}
+
+                    <!-- Loop through all form fields -->
+                    {% for field in form %}
+                        <div class="mb-3">
+                            {{ form_label(field, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(field, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(field) }}
+                        </div>
+                    {% endfor %}
+
+                                        <button type="submit" class="btn btn-success d-grid w-100">{{ button_label|default('Enregistrer') }}</button>
+
+                    {{ form_end(form) }}
+                </div>
+            </div>
+            <!-- /Register Form -->
+        </div>
+    </div>
+</div>
+{% endblock %}

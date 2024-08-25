@@ -1,11 +1,9 @@
-{% extends 'back/index.html.twig' %}
 
-{% block title %}Edit Solde{% endblock %}
 
 {% block body %}
     <h1>Edit Solde</h1>
 
-    {{ include('solde/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('solde/_form.html.twig', {'button_label': 'Update', 'attr': {'class': 'btn btn-warning d-grid w-100'}}) }}
 
     <a href="{{ path('app_solde_index') }}">back to list</a>
 

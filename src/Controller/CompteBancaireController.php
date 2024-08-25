@@ -22,7 +22,7 @@ class CompteBancaireController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_compte_bancaire_new', methods: ['GET', 'POST'])]
+    
     #[Route('/new', name: 'app_compte_bancaire_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
