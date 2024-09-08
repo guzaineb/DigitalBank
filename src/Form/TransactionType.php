@@ -17,13 +17,19 @@ class TransactionType extends AbstractType
             ->add('montant')
             ->add('description')
             ->add('date_transaction', null, [
-                'widget' => 'single_text'
+                'widget' => 'single_text',
             ])
-            ->add('compte_bancaie_id', EntityType::class, [
+            ->add('id_donneur', EntityType::class, [
                 'class' => CompteBancaire::class,
-'choice_label' => 'id',
+                'choice_label' => 'id',
+                'property_path' => 'id_donneur',
             ])
-        ;
+            ->add('id_recepteur', EntityType::class, [
+                'class' => CompteBancaire::class,
+                'choice_label' => 'id',
+                'property_path' => 'id_recepteur',
+            ]);
+            
     }
 
     public function configureOptions(OptionsResolver $resolver): void

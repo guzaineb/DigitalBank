@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -49,5 +50,20 @@ class UserController extends AbstractController
             'registrationForm' => $form->createView(),
         ]);
     }
+    #[Route('/', name: 'app_User_index', methods: ['GET'])]
+    public function indexUser(UserRepository $userRepository): Response
+    {
+        return $this->render('user/index.html.twig', [
+            'users' => $userRepository->findAll(),
+        ]);
+    }
+    /**
+ * @Route("/user", name="user_dashboard")
+ * @IsGranted("ROLE_USER")
+ */
+public function userDashboard(): Response
+{
+    return $this->render('user/dashboard.html.twig');
+}
     
 }

@@ -1,48 +1,180 @@
-{% extends 'front/index.html.twig' %}
-{% block title %}CompteBancaire index{% endblock %}
+{% extends 'back/index.html.twig' %}
 
 {% block body %}
-    <h1>CompteBancaire index</h1>
+  <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+          <div class="app-brand demo">
+           
+						 <img src="{{ asset('images/2.png') }}" alt="Digital Bank Logo" class="app-brand-logo"  width="50" />
+    
+						<span class="app-brand-text demo menu-text fw-bolder ms-2">Digital Bank</span>
+					</a>
+              
+
+            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+              <i class="bx bx-chevron-left bx-sm align-middle"></i>
+            </a>
+          </div>
+
+          <div class="menu-inner-shadow"></div>
+
+          <ul class="menu-inner py-1">
+            <!-- Dashboard -->
+            <li class="menu-item">
+              <a href="{{ path('app_back') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <div data-i18n="Analytics">Dashboard</div>
+              </a>
+            </li>
+
+          
+					<li class="menu-item active">
+						<a href="{{ path('app_compte_bancaire_index') }}" class="menu-link">
+							<i class="menu-icon tf-icons bx bx-crown"></i>
+							<div data-i18n="CompteBancaire ">Compte Bancaire</div>
+						</a>
+					</li>
+
+					<li class="menu-item">
+						<a href="{{ path('app_solde_index') }}" class="menu-link">
+							<i class="bi bi-cash-stack me-2"></i>
+							<div data-i18n="Solde">Solde</div>
+						</a>
+					</li>
+					<li class="menu-item">
+						<a href="{{ path('app_transaction_index') }}" class="menu-link">
+							<i class="bi bi-arrow-left-right me-2"></i>
+							<div data-i18n="Transaction">Transaction</div>
+						</a>
+					</li>
+
+            <!-- Misc -->
+            
+            
+          </ul>
+        </aside>
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+
+          <nav
+            class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+            id="layout-navbar"
+          >
+            <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+              <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                <i class="bx bx-menu bx-sm"></i>
+              </a>
+            </div>
+
+            <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+              <!-- Search -->
+              
+              <!-- /Search -->
+
+              <ul class="navbar-nav flex-row align-items-center ms-auto">
+                <!-- Place this tag where you want the button to render. -->
+              
+
+                <!-- User -->
+                
+                <!--/ User -->
+              </ul>
+            </div>
+          </nav>
+
+          <!-- / Navbar -->
+
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+
+             <h1>CompteBancaire Index</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>CompteBancaire</th>
-                <th>Numero_compte</th>
-                <th>Cratted_at</th>
-                <th>Updated_at</th>
-                <th>User_id</th>
+                <th>Compte Bancaire</th>
+                <th>Numero Compte</th>
+           
                 <th>Nom</th>
                 <th>Prenom</th>
-
-                <th>actions</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-        {% for compte_bancaire in compte_bancaires %}
-            <tr>
-                <td>{{ compte_bancaire.id }}</td>
-                <td>{{ compte_bancaire.CompteBancaire }}</td>
-                <td>{{ compte_bancaire.numeroCompte }}</td>
-                <td>{{ compte_bancaire.crattedAt ? compte_bancaire.crattedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ compte_bancaire.updatedAt ? compte_bancaire.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ compte_bancaire.userId }}</td>
-<td>{{ compte_bancaire.user ? compte_bancaire.user.nom : 'N/A' }}</td>
-<td>{{ compte_bancaire.user ? compte_bancaire.user.prenom : 'N/A' }}</td>
-
-                <td>
-                    <a href="{{ path('app_compte_bancaire_show', {'id': compte_bancaire.id}) }}">show</a>
-                    <a href="{{ path('app_compte_bancaire_edit', {'id': compte_bancaire.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-        {% endfor %}
+            {% for compte_bancaire in compte_bancaires %}
+                <tr>
+                    <td>{{ compte_bancaire.id }}</td>
+                    <td>{{ compte_bancaire.compteBancaire }}</td>
+                    <td>{{ compte_bancaire.numeroCompte }}</td>
+                    <td>{{ compte_bancaire.user ? compte_bancaire.user.nom : 'N/A' }}</td>
+                    <td>{{ compte_bancaire.user ? compte_bancaire.user.prenom : 'N/A' }}</td>
+                    <td class="text-center">
+                        <a href="{{ path('app_compte_bancaire_show', {'id': compte_bancaire.id}) }}" class="btn btn-sm btn-info">Show</a>
+                        <a href="{{ path('app_compte_bancaire_edit', {'id': compte_bancaire.id}) }}" class="btn btn-sm btn-warning">Edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="9">No records found</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
+  <div class="mt-3">
+    <a href="{{ path('app_compte_bancaire_new') }}" class="btn btn-success">Create New</a>
+     </div>   
+            <footer class="content-footer footer bg-footer-theme">
+              <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                <div class="mb-2 mb-md-0">
+                  ©
+                  <script>
+                    document.write(new Date().getFullYear());
+                  </script>
+                  , made with ❤️ by
+                  <a href="https://themeselection.com" target="_blank" class="footer-link fw-bolder">ThemeSelection</a>
+                </div>
+                <div>
+                  <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank">License</a>
+                  <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More Themes</a>
 
-    <a href="{{ path('app_compte_bancaire_new') }}">Create new</a>
+                  <a
+                    href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/"
+                    target="_blank"
+                    class="footer-link me-4"
+                    >Documentation</a
+                  >
+
+                  <a
+                    href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
+                    target="_blank"
+                    class="footer-link me-4"
+                    >Support</a
+                  >
+                </div>
+              </div>
+            </footer>
+            <!-- / Footer -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+   
+   
 {% endblock %}

@@ -15,7 +15,7 @@ class SoldeType extends AbstractType
     {
         $builder
             ->add('montant')
-            ->add('compte_bancaire_id', EntityType::class, [
+            ->add('compteBancaire', EntityType::class, [
                 'class' => CompteBancaire::class,
 'choice_label' => 'id',
             ])

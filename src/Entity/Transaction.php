@@ -25,15 +25,25 @@ class Transaction
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date_transaction = null;
 
-    #[ORM\ManyToOne(inversedBy: 'transactions')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?CompteBancaire $compte_bancaie_id = null;
-
     /**
      * @var Collection<int, HistoriqueTransaction>
      */
     #[ORM\OneToMany(targetEntity: HistoriqueTransaction::class, mappedBy: 'transaction_id')]
     private Collection $historiqueTransactions;
+
+
+
+    #[ORM\ManyToOne(targetEntity: CompteBancaire::class)]
+    #[ORM\JoinColumn(nullable: false, name: 'id_donneur')]
+    private ?CompteBancaire $id_donneur = null;
+    
+    #[ORM\ManyToOne(targetEntity: CompteBancaire::class)]
+    #[ORM\JoinColumn(nullable: false, name: 'id_recepteur')]
+    private ?CompteBancaire $id_recepteur = null;
+    
+    #[ORM\Column(type: Types::STRING, length: 100, unique: true)]
+     private ?string $reference = null;
+
 
     public function __construct()
     {
@@ -81,17 +91,8 @@ class Transaction
         return $this;
     }
 
-    public function getCompteBancaieId(): ?CompteBancaire
-    {
-        return $this->compte_bancaie_id;
-    }
-
-    public function setCompteBancaieId(?CompteBancaire $compte_bancaie_id): static
-    {
-        $this->compte_bancaie_id = $compte_bancaie_id;
-
-        return $this;
-    }
+  
+  
 
     /**
      * @return Collection<int, HistoriqueTransaction>
@@ -122,4 +123,48 @@ class Transaction
 
         return $this;
     }
+
+    public function getReference(): ?string
+{
+    return $this->reference;
+}
+
+public function setReference(string $reference): static
+{
+    $this->reference = $reference;
+
+    return $this;
+}
+
+
+// Autres champs et méthodes...
+
+public function getIdDonneur(): ?CompteBancaire
+{
+    return $this->id_donneur;
+}
+
+public function setIdDonneur(?CompteBancaire $id_donneur): static
+{
+    $this->id_donneur = $id_donneur;
+
+    return $this;
+}
+
+public function getIdRecepteur(): ?CompteBancaire
+{
+    return $this->id_recepteur;
+}
+
+public function setIdRecepteur(?CompteBancaire $id_recepteur): static
+{
+    $this->id_recepteur = $id_recepteur;
+
+    return $this;
+}
+
+
+
+   
+
 }

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\CompteBancaireRepository;
@@ -16,27 +15,28 @@ class CompteBancaire
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $CompteBancaire;
+    private ?string $compteBancaire = null;
 
     #[ORM\Column]
-    private ?float $numero_compte ;
+    private ?string $numero_compte = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $cratted_at ;
+    private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updated_at ;
+    private ?\DateTimeImmutable $updated_at = null;
 
-    #[ORM\Column]
-    private ?int $user_id = null;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'comptesBancaires')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
 
-    #[ORM\OneToOne(mappedBy: 'compte_bancaire_id', cascade: ['persist', 'remove'])]
-    private ?Solde $solde_id = null;
+    #[ORM\OneToOne(mappedBy: 'compteBancaire', cascade: ['persist', 'remove'])]
+    private ?Solde $solde = null;
 
     /**
      * @var Collection<int, Transaction>
      */
-    #[ORM\OneToMany(targetEntity: Transaction::class, mappedBy: 'compte_bancaie_id')]
+    #[ORM\OneToMany(targetEntity: Transaction::class, mappedBy: 'compte_bancaire_id')]
     private Collection $transactions;
 
     public function __construct()
@@ -51,36 +51,36 @@ class CompteBancaire
 
     public function getCompteBancaire(): ?string
     {
-        return $this->CompteBancaire;
+        return $this->compteBancaire;
     }
 
-    public function setCompteBancaire(string $CompteBancaire): static
+    public function setCompteBancaire(string $compteBancaire): static
     {
-        $this->CompteBancaire = $CompteBancaire;
+        $this->compteBancaire = $compteBancaire;
 
         return $this;
     }
 
-    public function getNumeroCompte(): ?float
+    public function getNumeroCompte(): ?string
     {
         return $this->numero_compte;
     }
 
-    public function setNumeroCompte(float $numero_compte): static
+    public function setNumeroCompte(string $numero_compte): static
     {
         $this->numero_compte = $numero_compte;
 
         return $this;
     }
 
-    public function getCrattedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->cratted_at;
+        return $this->created_at;
     }
 
-    public function setCrattedAt(\DateTimeImmutable $cratted_at): static
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
     {
-        $this->cratted_at = $cratted_at;
+        $this->created_at = $created_at;
 
         return $this;
     }
@@ -97,31 +97,30 @@ class CompteBancaire
         return $this;
     }
 
-    public function getUserId(): ?int
+    public function getUser(): ?User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(int $user_id): static
+    public function setUser(?User $user): static
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getSoldeId(): ?Solde
+    public function getSolde(): ?Solde
     {
-        return $this->solde_id;
+        return $this->solde;
     }
 
-    public function setSoldeId(Solde $solde_id): static
+    public function setSolde(Solde $solde): static
     {
-        // set the owning side of the relation if necessary
-        if ($solde_id->getCompteBancaireId() !== $this) {
-            $solde_id->setCompteBancaireId($this);
+        if ($solde->getCompteBancaire() !== $this) {
+            $solde->setCompteBancaire($this);
         }
 
-        $this->solde_id = $solde_id;
+        $this->solde = $solde;
 
         return $this;
     }
@@ -138,7 +137,7 @@ class CompteBancaire
     {
         if (!$this->transactions->contains($transaction)) {
             $this->transactions->add($transaction);
-            $transaction->setCompteBancaieId($this);
+            $transaction->setCompteBancaire($this);
         }
 
         return $this;
@@ -148,11 +147,41 @@ class CompteBancaire
     {
         if ($this->transactions->removeElement($transaction)) {
             // set the owning side to null (unless already changed)
-            if ($transaction->getCompteBancaieId() === $this) {
-                $transaction->setCompteBancaieId(null);
+            if ($transaction->getCompteBancaire() === $this) {
+                $transaction->setCompteBancaire(null);
             }
         }
 
         return $this;
     }
+
+    /**
+     * Ajoute un montant au solde actuel.
+     */
+    public function ajouterAuSolde(float $montant): static
+    {
+        if ($this->solde === null) {
+            $this->solde = new Solde();
+            $this->solde->setCompteBancaire($this);
+        }
+        
+        $nouveauMontant = $this->solde->getMontant() + $montant;
+        $this->solde->setMontant($nouveauMontant);
+
+        return $this;
+    }
+    public function effectuerTransaction(Transaction $transaction): void
+{
+    // Débit du compte du donneur
+    $montantADebiter = $transaction->getMontant();
+    $this->ajouterAuSolde(-$montantADebiter);
+
+    // Crédit du compte du récepteur
+    $recepteur = $transaction->getIdRecepteur();
+    $recepteur->ajouterAuSolde($montantADebiter);
+    
 }
+
+
+}
+

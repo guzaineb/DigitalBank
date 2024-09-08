@@ -1,34 +1,67 @@
 {% extends 'back/index.html.twig' %}
 
-
+{% block title %}Transaction Details{% endblock %}
 
 {% block body %}
-    <h1>Transaction</h1>
+    <div class="container mt-5">
+        <h1 class="mb-4"><i class="bi bi-receipt"></i> Transaction Details</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ transaction.id }}</td>
-            </tr>
-            <tr>
-                <th>Montant</th>
-                <td>{{ transaction.montant }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ transaction.description }}</td>
-            </tr>
-            <tr>
-                <th>Date_transaction</th>
-                <td>{{ transaction.dateTransaction ? transaction.dateTransaction|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tbody>
+                        <tr>
+                            <th scope="row"><i class="bi bi-hash"></i> Id</th>
+                            <td>{{ transaction.id }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><i class="bi bi-currency-dollar"></i> Montant</th>
+                            <td>{{ transaction.montant }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><i class="bi bi-chat-left-text"></i> Description</th>
+                            <td>{{ transaction.description }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><i class="bi bi-calendar3"></i> Date Transaction</th>
+                            <td>{{ transaction.dateTransaction ? transaction.dateTransaction|date('Y-m-d H:i:s') : '' }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><i class="bi bi-card-list"></i> Reference</th>
+                            <td>{{ transaction.reference }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><i class="bi bi-person-badge"></i> Numéro de Compte Donneur</th>
+                            <td>{{ transaction.getIdDonneur() ? transaction.getIdDonneur().getNumeroCompte() : 'N/A' }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><i class="bi bi-person-circle"></i> Donneur</th>
+                            <td>
+                                {{ transaction.getIdDonneur() ? transaction.getIdDonneur().getUser().getNom() : 'N/A' }} 
+                                {{ transaction.getIdDonneur() ? transaction.getIdDonneur().getUser().getPrenom() : 'N/A' }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><i class="bi bi-person-badge"></i> Numéro de Compte Recepteur</th>
+                            <td>{{ transaction.getIdRecepteur() ? transaction.getIdRecepteur().getNumeroCompte() : 'N/A' }}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><i class="bi bi-person-circle"></i> Recepteur</th>
+                            <td>
+                                {{ transaction.getIdRecepteur() ? transaction.getIdRecepteur().getUser().getNom() : 'N/A' }} 
+                                {{ transaction.getIdRecepteur() ? transaction.getIdRecepteur().getUser().getPrenom() : 'N/A' }}
+                            </td>
+                        </tr>
+                    </tbody> 
+                </table>
 
-    <a href="{{ path('app_transaction_index') }}">back to list</a>
+                <div class="mt-4 d-flex justify-content-between">
+                    <a href="{{ path('app_transaction_index') }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Back to list</a>
+                    <a href="{{ path('app_transaction_edit', {'id': transaction.id}) }}" class="btn btn-warning"><i class="bi bi-pencil-square"></i> Edit</a>
+                </div>
 
-    <a href="{{ path('app_transaction_edit', {'id': transaction.id}) }}">edit</a>
-
-    {{ include('transaction/_delete_form.html.twig') }}
+                {{ include('transaction/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

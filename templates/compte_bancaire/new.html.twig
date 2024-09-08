@@ -1,11 +1,61 @@
-{% extends 'front/index.html.twig' %}
-
-{% block title %}New CompteBancaire{% endblock %}
+{% extends 'back/index.html.twig' %}
 
 {% block body %}
-    <h1>Create new CompteBancaire</h1>
+<div class="container">
+    <div class="authentication-wrapper authentication-basic container-p-y">
+        <div class="authentication-inner">
+            <!-- Register -->
+            <div class="card" style="max-width: 600px; margin: auto;">
+                <div class="card-body">
+                    <!-- Logo -->
+                    <div class="app-brand justify-content-center mb-4">
+                        
+                            <span class="app-brand-logo me-3">
+                    <img src="{{ asset('images/2.png') }}" alt="Bank Digital Logo" width="50" height="50">
+                </span>
+                <span class="app-brand-text demo text-body fw-bolder">
+                    <span style="color: blue; font-weight: bold;">Digital</span>  
+                    <span style="color: green;">Bank</span>
+                </span>
+                        </a>
+                    </div>
+                    <!-- /Logo -->
+                    <h4 class="mb-2 text-center">Création de compte bancaire 👋</h4>
+                    <p class="mb-4 text-center">Veuillez remplir les informations pour créer un nouveau compte</p>
 
-    {{ include('compte_bancaire/_form.html.twig') }}
+                    {% if form_errors(form) %}
+                        <div class="alert alert-danger">{{ form_errors(form) }}</div>
+                    {% endif %}
 
-    <a href="{{ path('app_compte_bancaire_index') }}">back to list</a>
+                    {{ form_start(form, {'attr': {'class': 'mb-3'}}) }}
+                        <div class="mb-3">
+                            {{ form_label(form.compteBancaire, 'Type de Compte') }}
+                            {{ form_widget(form.compteBancaire, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(form.created_at, 'Date de création') }}
+                            {{ form_widget(form.created_at, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                       
+                        <div class="mb-3">
+                            {{ form_label(form.user, 'Utilisateur') }}
+                            {{ form_widget(form.user, {'attr': {'class': 'form-control'}}) }}
+                        </div>
+                        <div class="mb-3">
+                            <button class="btn btn-primary d-grid w-100" type="submit">Enregistrer</button>
+                        </div>
+                    {{ form_end(form) }}
+
+                    <p class="text-center">
+                        <span>Besoin d'aide?</span>
+                        <a href="#">
+                            <span>Contactez le support</span>
+                        </a>
+                    </p>
+                </div>
+            </div>
+            <!-- /Register -->
+        </div>
+    </div>
+</div>
 {% endblock %}

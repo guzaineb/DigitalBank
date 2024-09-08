@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\SoldeRepository;
@@ -14,9 +13,9 @@ class Solde
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'solde_id', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'solde', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?CompteBancaire $compte_bancaire_id = null;
+    private ?CompteBancaire $compteBancaire = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private ?string $montant = null;
@@ -26,14 +25,14 @@ class Solde
         return $this->id;
     }
 
-    public function getCompteBancaireId(): ?CompteBancaire
+    public function getCompteBancaire(): ?CompteBancaire
     {
-        return $this->compte_bancaire_id;
+        return $this->compteBancaire;
     }
 
-    public function setCompteBancaireId(CompteBancaire $compte_bancaire_id): static
+    public function setCompteBancaire(CompteBancaire $compteBancaire): static
     {
-        $this->compte_bancaire_id = $compte_bancaire_id;
+        $this->compteBancaire = $compteBancaire;
 
         return $this;
     }

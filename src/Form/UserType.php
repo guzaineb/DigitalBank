@@ -79,19 +79,7 @@ class UserType extends AbstractType{
                     ]),
                 ],
             ])
-            ->add('dateDeNaissance', DateType::class, [
-                'widget' => 'single_text',
-                'label' => 'Date de naissance',
-                'required' => true,
-                'constraints' => [
-                    new Assert\NotNull(['message' => 'La date de naissance est requise.']),
-                    new Assert\Date(['message' => 'Veuillez entrer une date valide.']),
-                    new Assert\LessThan([
-                        'value' => 'today',
-                        'message' => 'La date de naissance doit être dans le passé.'
-                    ]),
-                ],
-            ]);
+            ->add('dateDeNaissance');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

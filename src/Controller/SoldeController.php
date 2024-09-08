@@ -28,19 +28,40 @@ class SoldeController extends AbstractController
         $solde = new Solde();
         $form = $this->createForm(SoldeType::class, $solde);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($solde);
+            // Récupérer le compte bancaire associé
+            $compteBancaire = $solde->getCompteBancaire();
+    
+            if ($compteBancaire) {
+                $existingSolde = $compteBancaire->getSolde();
+    
+                if ($existingSolde) {
+                    // Si un solde existe déjà, ajouter le nouveau solde à l'existant
+                    $nouveauMontant = $existingSolde->getMontant() + $solde->getMontant();
+                    $existingSolde->setMontant($nouveauMontant);
+                    $entityManager->persist($existingSolde);
+                } else {
+                    // Sinon, enregistrer le nouveau solde
+                    $compteBancaire->setSolde($solde);
+                    $entityManager->persist($solde);
+                }
+            } else {
+                // Si aucun compte bancaire n'est associé (si cela peut arriver), gérer cette situation
+                $entityManager->persist($solde);
+            }
+    
             $entityManager->flush();
-
+    
             return $this->redirectToRoute('app_solde_index', [], Response::HTTP_SEE_OTHER);
         }
-
+    
         return $this->render('solde/new.html.twig', [
             'solde' => $solde,
             'form' => $form,
         ]);
     }
+    
 
     #[Route('/{id}', name: 'app_solde_show', methods: ['GET'])]
     public function show(Solde $solde): Response

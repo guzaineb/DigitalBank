@@ -1,39 +1,155 @@
 {% extends 'back/index.html.twig' %}
-
-{% block title %}Transaction index{% endblock %}
-
 {% block body %}
-    <h1>Transaction index</h1>
+<!-- Layout wrapper -->
+<div class="layout-wrapper layout-content-navbar">
+  <div class="layout-container">
+    <!-- Menu -->
+    <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+      <div class="app-brand demo">
+        <a href="index.html" class="app-brand-link">
+          <span class="app-brand-logo me-3">
+                    <img src="{{ asset('images/2.png') }}" alt="Bank Digital Logo" width="50" height="50">
+                </span>
+                <span class="app-brand-text demo text-body fw-bolder">
+                    <span style="color: blue; font-weight: bold;">Digital</span>  
+                    <span style="color: green;">Bank</span>
+                </span>
+        </a>
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+          <i class="bx bx-chevron-left bx-sm align-middle"></i>
+        </a>
+      </div>
+      <div class="menu-inner-shadow"></div>
+      <ul class="menu-inner py-1">
+        <!-- Dashboard -->
+        <li class="menu-item">
+          <a href="{{ path('app_back') }}" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-home-circle"></i>
+            <div data-i18n="Analytics">Dashboard</div>
+          </a>
+        </li>
+        
+        <li class="menu-item">
+          <a href="{{ path('app_compte_bancaire_index') }}" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-crown"></i>
+            <div data-i18n="CompteBancaire">Compte Bancaire</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="{{ path('app_solde_index') }}" class="menu-link">
+            <i class="bi bi-cash-stack me-2"></i>
+            <div data-i18n="Solde">Solde</div>
+          </a>
+        </li>
+        <li class="menu-item active">
+          <a href="{{ path('app_transaction_index') }}" class="menu-link">
+            <i class="bi bi-arrow-left-right me-2"></i>
+            <div data-i18n="Transaction">Transaction</div>
+          </a>
+        </li>
+     
+       
+      </ul>
+    </aside>
+    <!-- / Menu -->
 
-    <table class="table">
-        <thead>
+    <!-- Layout container -->
+    <div class="layout-page">
+     
+
+      <!-- Content wrapper -->
+      <div class="content-wrapper">
+        <h1 class="mb-4">Transaction Index</h1>
+
+        <table class="table">
+          <thead>
             <tr>
-                <th>Id</th>
-                <th>Montant</th>
-                <th>Description</th>
-                <th>Date_transaction</th>
-                <th>actions</th>
+              <th>Id</th>
+              <th>Montant</th>
+              <th>Description</th>
+              <th>Date Transaction</th>
+              <th>Reference</th>
+              <th>Numéro de Compte Donneur</th>
+                <th>Donneur</th>
+                <th>Numéro de Compte Recepteur</th>
+                  <th>Recepteur</th>
+              <th>Actions</th>
             </tr>
-        </thead>
-        <tbody>
-        {% for transaction in transactions %}
-            <tr>
+          </thead>
+          <tbody>
+            {% for transaction in transactions %}
+              <tr>
                 <td>{{ transaction.id }}</td>
                 <td>{{ transaction.montant }}</td>
                 <td>{{ transaction.description }}</td>
                 <td>{{ transaction.dateTransaction ? transaction.dateTransaction|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_transaction_show', {'id': transaction.id}) }}">show</a>
-                    <a href="{{ path('app_transaction_edit', {'id': transaction.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                <td>{{ transaction.reference }}</td>
+				 <td>{{ transaction.getIdDonneur() ? transaction.getIdDonneur().getNumeroCompte() : 'N/A' }}</td>
+				    <td>{{ transaction.getIdDonneur() ? transaction.getIdDonneur().getUser().getNom() : 'N/A' }}
+            {{ transaction.getIdDonneur() ? transaction.getIdDonneur().getUser().getPrenom() : 'N/A' }}</td>
+<td>{{ transaction.getIdRecepteur() ? transaction.getIdRecepteur().getNumeroCompte() : 'N/A' }}</td>
+<td>{{ transaction.getIdRecepteur() ? transaction.getIdRecepteur().getUser().getNom() : 'N/A' }}
 
-    <a href="{{ path('app_transaction_new') }}">Create new</a>
+{{ transaction.getIdRecepteur() ? transaction.getIdRecepteur().getUser().getPrenom() : 'N/A' }}</td>
+
+<td>
+                  <a href="{{ path('app_transaction_show', {'id': transaction.id}) }}" class="btn btn-info btn-sm">Show</a>
+                </td>
+              </tr>
+            {% else %}
+              <tr>
+                <td colspan="6" class="text-center">No records found</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+ <div class="mt-3">
+        <a href="{{ path('app_transaction_new') }}" class="btn btn-success">Create New</a>
+      </div>
+       <footer class="content-footer footer bg-footer-theme">
+              <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                <div class="mb-2 mb-md-0">
+                  ©
+                  <script>
+                    document.write(new Date().getFullYear());
+                  </script>
+                  , made with ❤️ by
+                  <a href="https://themeselection.com" target="_blank" class="footer-link fw-bolder">ThemeSelection</a>
+                </div>
+                <div>
+                  <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank">License</a>
+                  <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More Themes</a>
+
+                  <a
+                    href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/"
+                    target="_blank"
+                    class="footer-link me-4"
+                    >Documentation</a
+                  >
+
+                  <a
+                    href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
+                    target="_blank"
+                    class="footer-link me-4"
+                    >Support</a
+                  >
+                </div>
+              </div>
+            </footer>
+            <!-- / Footer -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+   
+   
 {% endblock %}

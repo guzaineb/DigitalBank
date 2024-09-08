@@ -22,33 +22,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
 
-
-    private $nom;
-
-    /**
-     * @ORM\Column(type="string", length=100)
-     */
-    private $prenom;
-
-    /**
-     * @ORM\Column(type="string", length=15)
-     */
-    private $numtelephone;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $adresse;
-
-
-
-
-
-
+    #[ORM\Column(type: 'string', length: 100)]
+    private ?string $nom = null;
+    
+    #[ORM\Column(type: 'string', length: 100)]
+    private ?string $prenom = null;
+    
+    #[ORM\Column(type: 'string', length: 8)]
+    private ?string $numtelephone = null;
+    
+    #[ORM\Column(type: 'string', length: 255)]
+    private ?string $adresse = null;
+    
+    #[ORM\Column(type: 'date', nullable: true)]
+    private ?\DateTimeInterface $dateDeNaissance = null;
+   
     /**
      * @var list<string> The user roles
      */
-    #[ORM\Column]
+    #[ORM\Column (type:'json')]
     private array $roles = [];
 
     /**
@@ -62,10 +54,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Feedback::class, mappedBy: 'user_id')]
     private Collection $feedback;
+    
+#[ORM\OneToMany(mappedBy: 'user', targetEntity: CompteBancaire::class, orphanRemoval: true)]
+private Collection $comptesBancaires;
 
     public function __construct()
     {
         $this->feedback = new ArrayCollection();
+        $this->comptesBancaires = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -86,15 +82,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
 
-/**
-     * @ORM\Column(type="date", nullable=true)
-     * @Assert\NotNull(message="La date de naissance est requise.")
-     * @Assert\Date(message="Veuillez entrer une date valide.")
-     * @Assert\LessThan("today", message="La date de naissance doit être dans le passé.")
-     */
-    private $dateDeNaissance;
 
-    // Getters and Setters for dateDeNaissance
     public function getDateDeNaissance(): ?\DateTimeInterface
     {
         return $this->dateDeNaissance;
@@ -126,10 +114,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
+        // assurez-vous que ROLE_USER est toujours présent
+        if (!in_array('ROLE_USER', $roles, true)) {
+            $roles[] = 'ROLE_USER';
+        }
         return array_unique($roles);
+    
     }
 
     /**
@@ -244,4 +234,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
+    
+
+
+
+
+
+public function getComptesBancaires(): Collection
+{
+    return $this->comptesBancaires;
+}
+
+public function addCompteBancaire(CompteBancaire $compteBancaire): static
+{
+    if (!$this->comptesBancaires->contains($compteBancaire)) {
+        $this->comptesBancaires->add($compteBancaire);
+        $compteBancaire->setUser($this);
+    }
+
+    return $this;
+}
+
+public function removeCompteBancaire(CompteBancaire $compteBancaire): static
+{
+    if ($this->comptesBancaires->removeElement($compteBancaire)) {
+        // set the owning side to null (unless already changed)
+        if ($compteBancaire->getUser() === $this) {
+            $compteBancaire->setUser(null);
+        }
+    }
+
+    return $this;
+}
 }
